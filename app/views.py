@@ -23,13 +23,13 @@ import apiai
 
 #api.ai
 
-ai=apiai.ApiAI('0ff73c1acdaa4de09e64c512dc1bbba5')
-client=apiai.ApiAI('0ff73c1acdaa4de09e64c512dc1bbba5')
+ai=apiai.ApiAI('727bb4aee19c458896179e2c2e5b187c')
+client=apiai.ApiAI('727bb4aee19c458896179e2c2e5b187c')
 
 
-#getting data from  demoac.azurewebsites.net/FoodSearch/GetFoods
+#getting data from  demoac.azurewebsites.net/api/FBot/GetAllFoods.
 
-res = requests.get('http://allecarte.azurewebsites.net/FoodSearch/GetFoods').json()
+res = requests.post('http://allecarte.azurewebsites.net/api/FBot/GetAllFoods').json()
 
 #python module to send messages and media to facebook
 
@@ -37,9 +37,10 @@ messenger=MessengerClient('EAAC10qzQOAEBAJ3QWHuOVRqHH1UM85cydtgpD6JQ9bQTE4mkGZA7
 # a list of greeetings
 
 greeetings=['Hey', 'hey', 'hi','Hi', 'Hello', 'hello','Whats up']
-case1=['Karma Sushi in Aalborg']
-case2=['Cafe Peace in Aalborg']
-case3=['wedoburgers in Aalborg']
+case1=['Karma Sushi in Aalborg', 'karma sushi in aalborg']
+case2=['Cafe Peace in Aalborg', 'cafe peace in aalborg']
+case3=['wedoburgers in aalborg', 'WeDoBurgers in Aalborg']
+finish=['bye', 'Bye', 'Thank you', 'thank you', 'Okay', 'okay','ok','Ok','alright','Alright','see you','See you']
 
 #cities=['copenhagen', 'Copenhagen', 'Aalborg', 'aalborg', 'Mimice', 'mimice', 'Dunakeszi', 'dunakeszi', 'Aarhus', 'aarhus', 'København', 'københavn', 'Budapest', 'budapest']
 
@@ -110,6 +111,10 @@ def webhook(request):
                     button_title="View Restaurant",
                     button_url=" http://wedoburgers.dk"
                 )
+
+            elif message in finish:
+                sendMessage(recipient,
+                            'I hope that i could help you! Remember that you have a choice! See you :)')
             else:
                 call_apiai(message, recipient)
 
@@ -188,14 +193,9 @@ def sendMessage(recipient, msg):
 
 #this function sends a welcome
 def sendWelcome(recipient):
-    msg="Welcome to Alle Carte, a platform to connect like minded people and to easily find restaurant meals that fit your needs"
-    attachment=attachments.ImageAttachment(url='https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAcwAAAAJGM1OGE5YmJkLTg2ZTUtNGE3Yi05OTg3LWRlZjhlZmViYzUwZg.png')
+    msg='Welcome to Alle Carte! My name is Liam and I will help you find the perfect meal for you! Just tell me what you are looking for and where, for example "Vegan in Copenhagen", then I will give you 5 meals that fit your needs. Now that you know what my abilities are, just let me know how I can assist you :)'
     message1=messages.Message(text=msg)
     request=messages.MessageRequest(recipient, message1)
-    messenger.send(request)
-
-    message2 = messages.Message(attachment=attachment)
-    request = messages.MessageRequest(recipient, message2)
     messenger.send(request)
 
 #this function sends a Carousel to  facebook
